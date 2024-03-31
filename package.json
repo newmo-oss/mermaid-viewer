@@ -16,7 +16,9 @@
   "browserslist": "> 0.5%, last 2 versions",
   "scripts": {
     "dev": "parcel",
-    "build": "parcel build"
+    "build": "parcel build",
+    "test": "npm run type-check && npm run build",
+    "type-check": "tsc --noEmit"
   },
   "files": [
     "bin/",
