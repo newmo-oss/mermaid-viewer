@@ -16,7 +16,7 @@
   "browserslist": "> 0.5%, last 2 versions",
   "scripts": {
     "dev": "parcel",
-    "build": "parcel build",
+    "build": "parcel build --public-url /it-mermaid-viewer/",
     "test": "npm run type-check && npm run build",
     "type-check": "tsc --noEmit",
     "preview": "npm run build && npx http-server dist"
