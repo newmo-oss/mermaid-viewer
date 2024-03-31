@@ -185,29 +185,6 @@
     </template>
 </x-mermaid-controller>
 <div id="graphDiv"></div>
-<script type="module">
-    import { MermaidController, urlStorage } from './index.ts';
-
-    customElements.define('x-mermaid-controller', MermaidController);
-    const mermaid = document.querySelector("x-mermaid-controller");
-    const defaultSequence = `sequenceDiagram
-    autonumber
-    Alice->>Bob: Hello Bob, how are you ?
-    Bob->>Alice: Fine, thank you. And you?
-    create participant Carl
-    Alice->>Carl: Hi Carl!
-    create actor D as Donald
-    Carl->>D: Hi!
-    destroy Carl
-    Alice-xCarl: We are too many
-    destroy Bob
-    Bob->>Alice: I agree
-`;
-    mermaid.setAttribute("text", urlStorage.get("text") ?? defaultSequence);
-    // listen change event
-    mermaid.addEventListener("change", (e) => {
-        urlStorage.set("text", e.detail.text);
-    });
-</script>
+<script type="module" src="index.ts"></script>
 </body>
 </html>
