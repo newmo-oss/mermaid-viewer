@@ -247,6 +247,7 @@ export class MermaidController extends HTMLElement {
             // https://github.com/anvaka/panzoom/issues/219
             pan.smoothShowRectangle({
                 ...rect.toJSON(),
+                // TODO: need to configurable or calculate from parent element
                 left: rect.left - 150,
                 top: rect.top - 150,
                 right: rect.right + 150,
