@@ -48,7 +48,7 @@ export const urlStorage = {
  * dispatch "change" event when text is changed
  */
 export class MermaidController extends HTMLElement {
-    static observedAttributes = ["text", "sequence-number"];
+    static observedAttributes = ["text", "sequence-number", "dialog-open"];
     #inputDialogOpened = false;
     #target?: string;
     #graphDiv?: SVGElement;
@@ -209,6 +209,12 @@ export class MermaidController extends HTMLElement {
             this.onReadySqeuenceController().then((controller) => {
                 controller?.moveTo(Number(newValue));
             });
+        } else if (name === "dialog-open") {
+            if (newValue === "true") {
+                this.openInputDialog();
+            } else {
+                this.closeInputDialog();
+            }
         }
     }
 

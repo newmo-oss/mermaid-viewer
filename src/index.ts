@@ -1,4 +1,5 @@
 import { MermaidController, urlStorage } from "./MermaidController";
+
 customElements.define("x-mermaid-controller", MermaidController);
 const mermaid = document.querySelector("x-mermaid-controller") as MermaidController;
 if (!mermaid) {
@@ -18,8 +19,17 @@ const defaultSequence = `sequenceDiagram
     destroy Bob
     Bob->>Alice: I agree
 `;
-mermaid.setAttribute("text", urlStorage.get("text") ?? defaultSequence);
-mermaid.setAttribute("sequence-number", urlStorage.get("sequence-number") ?? "0");
+const text = urlStorage.get("text");
+if (text) {
+    mermaid.setAttribute("text", text);
+} else {
+    mermaid.setAttribute("text", defaultSequence);
+    mermaid.setAttribute("dialog-open", "true");
+}
+const sequence = urlStorage.get("sequence-number");
+if (sequence) {
+    mermaid.setAttribute("sequence-number", sequence);
+}
 mermaid.on("textChange", (event) => {
     urlStorage.set("text", event.detail.text);
 });
