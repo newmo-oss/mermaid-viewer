@@ -1,7 +1,7 @@
 {
   "name": "it-mermaid-viewer",
   "version": "1.0.0",
-  "description": "",
+  "description": "Interactive Mermaid Viewer",
   "homepage": "https://github.com/azu/it-mermaid-viewer",
   "bugs": {
     "url": "https://github.com/azu/it-mermaid-viewer/issues"
