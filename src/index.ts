@@ -1,10 +1,10 @@
-import { MermaidController, urlStorage } from './MermaidController';
-customElements.define('x-mermaid-controller', MermaidController);
-const mermaid = document.querySelector("x-mermaid-controller");
+import { MermaidController, urlStorage } from "./MermaidController";
+customElements.define("x-mermaid-controller", MermaidController);
+const mermaid = document.querySelector("x-mermaid-controller") as MermaidController;
 if (!mermaid) {
     throw new Error("Mermaid controller not found");
-
 }
+
 const defaultSequence = `sequenceDiagram
     autonumber
     Alice->>Bob: Hello Bob, how are you ?
@@ -19,7 +19,10 @@ const defaultSequence = `sequenceDiagram
     Bob->>Alice: I agree
 `;
 mermaid.setAttribute("text", urlStorage.get("text") ?? defaultSequence);
-// @ts-expect-error listen change event
-mermaid.addEventListener("change", (e: CustomEvent<{ text: string }>) => {
-    urlStorage.set("text", e.detail.text);
+mermaid.setAttribute("sequence-number", urlStorage.get("sequence-number") ?? "0");
+mermaid.on("textChange", (event) => {
+    urlStorage.set("text", event.detail.text);
+});
+mermaid.on("sequenceChange", (event) => {
+    urlStorage.set("sequence-number", String(event.detail.sequenceNumber));
 });

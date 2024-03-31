@@ -19,7 +19,9 @@
     "build": "parcel build --public-url /it-mermaid-viewer/",
     "test": "npm run type-check && npm run build",
     "type-check": "tsc --noEmit",
-    "preview": "npm run build && npx http-server dist"
+    "preview": "npm run build && npx http-server dist",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css}\"",
+    "prepare": "git config --local core.hooksPath .githooks"
   },
   "files": [
     "bin/",
@@ -30,11 +32,23 @@
     "@parcel/config-default": "^2.12.0",
     "@parcel/transformer-typescript-tsc": "^2.12.0",
     "parcel": "^2.12.0",
+    "prettier": "^3.2.5",
     "typescript": "^5.4.3"
   },
   "dependencies": {
     "mermaid": "^10.9.0",
     "panzoom": "github:Timo-Weike/panzoom#692e5f2766ab0f2726ad7b92f751b63024decc44",
     "svg-pan-zoom": "^3.6.1"
+  },
+  "prettier": {
+    "singleQuote": false,
+    "printWidth": 120,
+    "tabWidth": 4,
+    "trailingComma": "none"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,css}": [
+      "prettier --write"
+    ]
   }
 }

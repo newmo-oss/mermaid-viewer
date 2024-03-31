@@ -18,8 +18,12 @@ Interactive Mermaid Viewer.
 4. Render
 5. Fun!!!
 
-## Embed
+## Query Parameters
 
+it-mermaid-viewer support query parameters.
+
+- `?text=<url-encoded-mermaid-text>`: Embed Mermaid text
+- `?sequence-number=<number>`: Start sequence number
 
 ## Changelog
 
