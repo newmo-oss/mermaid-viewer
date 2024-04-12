@@ -19,7 +19,7 @@ const defaultSequence = `sequenceDiagram
     destroy Bob
     Bob->>Alice: I agree
 `;
-const text = urlStorage.get("text");
+const text = urlStorage.getText();
 if (text) {
     mermaid.setAttribute("text", text);
 } else {
@@ -31,7 +31,7 @@ if (sequence) {
     mermaid.setAttribute("sequence-number", sequence);
 }
 mermaid.on("textChange", (event) => {
-    urlStorage.set("text", event.detail.text);
+    urlStorage.setText(event.detail.text);
 });
 mermaid.on("sequenceChange", (event) => {
     urlStorage.set("sequence-number", String(event.detail.sequenceNumber));

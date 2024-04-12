@@ -29,6 +29,20 @@ export type EventNameAndMermaidEventMapping = {
     sequenceChange: SequenceChangeEvent;
 };
 export const urlStorage = {
+    // use hash for avoiding URL is too long 414 Request-URI Too Large
+    // text is too long
+    getText: () => {
+        const url = new URL(window.location.href);
+        const value = url.hash.slice(1);
+        if (value) {
+            return decodeURIComponent(value);
+        }
+        return null;
+    },
+    setText: (value: string) => {
+        // encode to avoid special characters
+        location.hash = encodeURIComponent(value);
+    },
     get: (key: SupportedKey) => {
         const url = new URL(window.location.href);
         const value = url.searchParams.get(key);
@@ -109,6 +123,15 @@ export class MermaidController extends HTMLElement {
             }
         );
         this.#sequence.sequenceStepper.addEventListener(
+            "keydown",
+            (event) => {
+                event.stopPropagation();
+            },
+            {
+                passive: false
+            }
+        );
+        this.#inputDialogInput.addEventListener(
             "keydown",
             (event) => {
                 event.stopPropagation();
@@ -219,7 +242,7 @@ export class MermaidController extends HTMLElement {
     }
 
     async onReadySqeuenceController() {
-        while(!this.#sequence?.sequenceController) {
+        while (!this.#sequence?.sequenceController) {
             await new Promise<void>((resolve) => {
                 setTimeout(() => {
                     resolve();
