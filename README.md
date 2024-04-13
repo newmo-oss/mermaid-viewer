@@ -37,6 +37,68 @@ Pass your Mermaid text by URL parameters.
 ?sequence-number=10#sequenceDiagram%0AA-%3E%3EB%3A%20Hello
 ```
 
+## GitHub Actions Integration
+
+If you commit mermaid text to your repository, you can add a link to the it-mermaid-viewer to the PR.
+
+```yaml
+name: it-mermaid-viewer-notice
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  it-mermaid-viewer-notice:
+    name: Add Mermaid Viewer to PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          separator: ","
+          files: |
+            **/*.md
+      - name: Show changed files
+        run: echo "${{ steps.changed-files.outputs.all_changed_files }}"
+      - name: Add notice to PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // arguments is an array of file paths
+            const fs = require("node:fs/promises");
+            const positionals = process.env.CHANGED_FILES.split(",").filter(Boolean);
+            const fileContents = await Promise.all(positionals.map(async (file) => {
+                return {
+                    name: file,
+                    content: await fs.readFile(file, 'utf-8')
+                }
+            }));
+            for (const fileContent of fileContents) {
+                const { content } = fileContent;
+                const mermaidCodes = content.matchAll(/```mermaid([\s\S]*?)```/g);
+                for (const mermaidCode of mermaidCodes) {
+                    const mermaidText = mermaidCode[1];
+                    const startLine = content.slice(0, mermaidCode.index).split("\n").length;
+                    const endLine = content.slice(0, mermaidCode.index + mermaidCode[0].length).split("\n").length;
+                    console.log(`file: ${fileContent.name}, startColumn: ${mermaidCode.index}, endColumn: ${mermaidCode.index + mermaidCode[0].length}, startLine: ${startLine}, endLine: ${endLine}`);
+                    core.summary.addCodeBlock(`${mermaidText}`, 'mermaid');
+                    core.summary.addLink('Mermaid Viewer', `https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`);
+                    core.summary.addSeparator();
+                    core.summary.write({overwrite: true})
+                    core.notice(`https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`, { title: "Mermaid Viewer", file: fileContent.name, startLine, endLine });
+                  }
+              }
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+```
+
+
 ## Changelog
 
 See [Releases page](https://github.com/azu/it-mermaid-viewer/releases).
