@@ -428,7 +428,7 @@ export class MermaidController extends HTMLElement {
             const calcPaddingInline = -1 / 5 * viewBoxSize.width + 700;
             const rectanglePaddingBlock = Math.max(100, Math.min(600, calcPaddingBlock));
             const rectanglePaddingInline = Math.max(100, Math.min(600, calcPaddingInline));
-            console.debug("Padding Calculation Results",{
+            console.debug("Padding Calculation Results", {
                 viewBoxSize,
                 calcPaddingBlock,
                 calcPaddingInline,
@@ -475,6 +475,7 @@ export class MermaidController extends HTMLElement {
                 const moveToNumber = Math.max(0, currentNumber + 1);
                 const currentSequenceElement = getSequenceElement(moveToNumber);
                 if (!currentSequenceElement) {
+                    this.#pan?.smoothShowRectangle
                     return;
                 }
                 panElement(currentSequenceElement);
@@ -483,6 +484,12 @@ export class MermaidController extends HTMLElement {
             movePrev: () => {
                 const currentNumber = this.#sequence?.currentSequenceNumber ?? 0;
                 const moveToNumber = Math.max(0, currentNumber - 1);
+                if (moveToNumber === 0) {
+                    // reset zoom
+                    this.#pan?.smoothZoomAbs(0, 0, 1);
+                    this.updateSequenceNumber(0)
+                    return;
+                }
                 const currentSequenceElement = getSequenceElement(moveToNumber);
                 if (!currentSequenceElement) {
                     return;
