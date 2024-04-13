@@ -1,17 +1,26 @@
 # @newmo-oss/mermaid-viewer
 
-User Friendly Mermaid Viewer
+User Friendly [Mermaid](https://mermaid.js.org/) Diagram Viewer.
 
 ## WebSite
 
 - <https://newmo-oss.github.io/mermaid-viewer/>
+
+## Motivation
+
+Mermaid is a great tool for creating diagrams.
+However, it is hard to read large diagrams because the default viewer does not support interactive features like zooming in/out.
+
+[@newmo-oss/mermaid-viewer](https://newmo-oss.github.io/mermaid-viewer/) is a user-friendly Mermaid diagram viewer that supports interactive features like zooming in/out and step-by-step sequence viewing. 
+
+![mermaid-viewer](./newmo-mermaid-viewer.mp4)
 
 ## Features
 
 - Interactive controller for [Sequence diagrams](https://mermaid.js.org/syntax/sequenceDiagram.html)
   - Enable `autonumber` option by default
 - Zoom in/out
-- Support embed
+- Support embed as iframe into your site
   - `?text=<url-encoded-mermaid-text>` query parameter
 
 ## Usage
@@ -23,7 +32,7 @@ User Friendly Mermaid Viewer
 
 ## URL Parameters/Hash
 
-@newmo-oss/mermaid-viewer support query parameters.
+[@newmo-oss/mermaid-viewer](https://newmo-oss.github.io/mermaid-viewer/) support query parameters.
 
 - `?sequence-number=<number>`: Start sequence number
 - `#<url-encoded-mermaid-text>`: Embed Mermaid text

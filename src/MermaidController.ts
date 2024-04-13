@@ -114,7 +114,6 @@ export class MermaidController extends HTMLElement {
     static observedAttributes = ["text", "sequence-number", "dialog-open"];
     #inputDialogOpened = false;
     #target?: string;
-    #graphDiv?: SVGElement;
     #inputDialog?: HTMLDialogElement;
     #inputDialogOpen?: HTMLButtonElement;
     #inputDialogClose?: HTMLButtonElement;
@@ -136,7 +135,6 @@ export class MermaidController extends HTMLElement {
         if (!this.shadowRoot) {
             return; // Do nothing if no shadow root
         }
-        this.#graphDiv = this.shadowRoot.querySelector("#graphDiv")!;
         this.#inputDialog = this.shadowRoot.querySelector("#inputDialog")!;
         this.#inputDialogClose = this.shadowRoot.querySelector("#inputDialogClose")!;
         this.#inputDialogOpen = this.shadowRoot.querySelector("#openDialog")!;
@@ -384,7 +382,9 @@ export class MermaidController extends HTMLElement {
             number: number;
             rect: DOMRect;
         };
-        const viewBox = this.#graphDiv
+        // width: 4
+        const viewBox = document
+            ?.querySelector("#graphDiv svg")
             ?.getAttribute("viewBox")
             ?.split(" ")
             .map((e) => Number(e));
@@ -416,16 +416,35 @@ export class MermaidController extends HTMLElement {
                 return;
             }
             const rect = target.rect;
+            // Padding is calculated by the following formula
+            // viewPort 4500 -> padding: 150
+            // viewPort 4000 → padding: 200
+            // viewPort 3000 → padding: 300
+            // viewPort 2000 → padding: 400
+            // viewPort 1000 → padding: 500
+            // y = -1/5x + 700
+            // limit: 100 <= padding <= 600
+            const calcPaddingBlock = -1 / 5 * viewBoxSize.height + 700;
+            const calcPaddingInline = -1 / 5 * viewBoxSize.width + 700;
+            const rectanglePaddingBlock = Math.max(100, Math.min(600, calcPaddingBlock));
+            const rectanglePaddingInline = Math.max(100, Math.min(600, calcPaddingInline));
+            console.debug("Padding Calculation Results",{
+                viewBoxSize,
+                calcPaddingBlock,
+                calcPaddingInline,
+                rectanglePaddingBlock,
+                rectanglePaddingInline
+            })
             // target.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" })
             // https://github.com/anvaka/panzoom/issues/219
             pan.smoothShowRectangle(
                 {
                     ...rect.toJSON(),
                     // TODO: need to configurable or calculate from parent element
-                    left: rect.left - 150,
-                    top: rect.top - 150,
-                    right: rect.right + 150,
-                    bottom: rect.bottom + 150
+                    left: rect.left - rectanglePaddingInline,
+                    top: rect.top - rectanglePaddingBlock,
+                    right: rect.right + rectanglePaddingInline,
+                    bottom: rect.bottom + rectanglePaddingBlock
                 },
                 (from, to) => {
                     const distance = Math.sqrt(
