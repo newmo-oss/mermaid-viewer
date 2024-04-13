@@ -19,8 +19,10 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
-          separator: "\n"
-      - name: show changed files
+          separator: ","
+          files: |
+            **/*.md
+      - name: Show changed files
         run: echo "${{ steps.changed-files.outputs.all_changed_files }}"
       - name: Add notice to PR
         uses: actions/github-script@v7
@@ -28,7 +30,7 @@ jobs:
           script: |
             // arguments is an array of file paths
             const fs = require("node:fs/promises");
-            const positionals = process.env.CHANGED_FILES.split("\n").filter(Boolean);
+            const positionals = process.env.CHANGED_FILES.split(",").filter(Boolean);
             const fileContents = await Promise.all(positionals.map(async (file) => {
                 return {
                     name: file,
