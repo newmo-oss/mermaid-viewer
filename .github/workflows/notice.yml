@@ -1,0 +1,42 @@
+name: it-mermaid-viewer-notice
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  it-mermaid-viewer-notice:
+    name: Add notice to PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            *.md # Only check markdown files
+      - name: Add notice to PR
+        run: |
+            // arguments is an array of file paths
+            import fs from "node:fs/promises";
+            const positionals = process.env.CHANGED_FILES.split("\n").filter(Boolean);
+            const fileContents = await Promise.all(positionals.map(async (file) => {
+                return {
+                    name: file,
+                    content: await fs.readFile(file, 'utf-8')
+                }
+            }));
+            for (const fileContent of fileContents) {
+                const { content } = fileContent;
+                const mermaidCodes = content.matchAll(/```mermaid([\s\S]*?)```/g);
+                for (const mermaidCode of mermaidCodes) {
+                    const mermaidText = mermaidCode[1];
+                    console.log(`::notice file=${fileContent.name},line=${mermaidCode.index},endLine=${mermaidCode.index + mermaidCode[0].length},title=Mermaid Viewer::https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`);
+                }
+            }
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
