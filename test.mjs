@@ -20,6 +20,6 @@ for (const fileContent of fileContents) {
     const mermaidCodes = content.matchAll(/```mermaid([\s\S]*?)```/g);
     for (const mermaidCode of mermaidCodes) {
         const mermaidText = mermaidCode[1];
-        console.log(`::notice file=${fileContent.name},line=${mermaidCode.index},endLine=${mermaidCode.index + mermaidCode[0].length},title=Mermaid Viewer::https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`);
+        console.log(`::notice file=${fileContent.name},line=${mermaidCode.index},endLine=${mermaidCode.index + mermaidCode[0].length},title=Viewer::hthttps://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`);
     }
 }

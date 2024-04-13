@@ -58,6 +58,7 @@ jobs:
                     core.summary.addCodeBlock(`${mermaidText}`, 'mermaid');
                     core.summary.addLink('Mermaid Viewer', `https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`);
                     core.summary.addSeparator();
+                    core.summary.write({overwrite: true})
                     core.notice(`https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`, { title: "Mermaid Viewer", file: fileContent.name, startColumn: mermaidCode.index, endColumn: mermaidCode.index + mermaidCode[0].length });
                   }
               }
