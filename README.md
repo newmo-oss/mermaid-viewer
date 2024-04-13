@@ -54,7 +54,7 @@ permissions:
   contents: read
 jobs:
   mermaid-viewer-notice:
-    name: Add Mermaid Viewer to PR
+    name: Add Mermaid Viewer Link to PR
     runs-on: ubuntu-latest
     steps:
       - name: checkout
