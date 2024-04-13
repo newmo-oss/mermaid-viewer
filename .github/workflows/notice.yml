@@ -30,6 +30,7 @@ jobs:
           script: |
             // arguments is an array of file paths
             const fs = require("node:fs/promises");
+            const fs = require("node:fs/promises");
             const positionals = process.env.CHANGED_FILES.split(",").filter(Boolean);
             const fileContents = await Promise.all(positionals.map(async (file) => {
                 return {
@@ -42,7 +43,8 @@ jobs:
                 const mermaidCodes = content.matchAll(/```mermaid([\s\S]*?)```/g);
                 for (const mermaidCode of mermaidCodes) {
                     const mermaidText = mermaidCode[1];
-                    core.notice("Mermaid Viewer", { file: fileContent.name, startLine: mermaidCode.index, endLine: mermaidCode.index + mermaidCode[0].length, url: `https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}` });
+                    console.log(`file: ${fileContent.name}, start: ${mermaidCode.index}, end: ${mermaidCode.index + mermaidCode[0].length}`);
+                    core.notice(`https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`, { title: "Mermaid Viewer", file: fileContent.name, startLine: mermaidCode.index, endLine: mermaidCode.index + mermaidCode[0].length, url:  });
                 }
             }
         env:
