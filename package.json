@@ -1,7 +1,7 @@
 {
   "name": "@newmo-oss/mermaid-viewer",
   "version": "1.0.0",
-  "description": "User Friendly Mermaid Viewer\n\n",
+  "description": "User Friendly Mermaid Viewer",
   "homepage": "https://github.com/newmo-oss/mermaid-viewer",
   "bugs": {
     "url": "https://github.com/newmo-oss/mermaid-viewer/issues"
