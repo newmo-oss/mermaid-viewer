@@ -20,8 +20,6 @@ jobs:
         uses: tj-actions/changed-files@v44
         with:
           separator: "\n"
-          files: |
-            *.md # Only check markdown files
       - name: show changed files
         run: echo "${{ steps.changed-files.outputs.all_changed_files }}"
       - name: Add notice to PR
