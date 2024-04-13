@@ -28,20 +28,71 @@ export type EventNameAndMermaidEventMapping = {
     textChange: TextChangeEvent;
     sequenceChange: SequenceChangeEvent;
 };
+
+// compress and decompress text using CompressionStream and DecompressionStream
+// https://numb86-tech.hatenablog.com/entry/2023/01/22/171246
+const compress = async (target: string): Promise<string> => {
+    const arrayBufferToBinaryString = (arrayBuffer: ArrayBuffer): string => {
+        const bytes = new Uint8Array(arrayBuffer);
+
+        let binaryString = "";
+        for (let i = 0; i < bytes.byteLength; i++) {
+            binaryString += String.fromCharCode(bytes[i]);
+        }
+
+        return binaryString;
+    };
+
+    const blob = new Blob([target]);
+    const stream = blob.stream();
+    const compressedStream = stream.pipeThrough(
+        new CompressionStream("deflate-raw")
+    );
+    const buf = await new Response(compressedStream).arrayBuffer();
+    const binaryString = arrayBufferToBinaryString(buf);
+    const encodedByBase64 = btoa(binaryString);
+    return encodedByBase64;
+};
+
+const decompress = async (target: string): Promise<string> => {
+    const binaryStringToBytes = (str: string): Uint8Array => {
+        const bytes = new Uint8Array(str.length);
+        for (let i = 0; i < str.length; i++) {
+            bytes[i] = str.charCodeAt(i);
+        }
+        return bytes;
+    };
+    const decodedByBase64 = atob(target);
+    const bytes = binaryStringToBytes(decodedByBase64);
+    const stream = new Blob([bytes]).stream();
+    const decompressedStream = stream.pipeThrough(
+        new DecompressionStream("deflate-raw")
+    );
+    return await new Response(decompressedStream).text();
+};
+
+
 export const urlStorage = {
     // use hash for avoiding URL is too long 414 Request-URI Too Large
     // text is too long
-    getText: () => {
+    getText: async () => {
         const url = new URL(window.location.href);
         const value = url.hash.slice(1);
         if (value) {
-            return decodeURIComponent(value);
+            try {
+                return await decompress(decodeURIComponent(value));
+            } catch {
+                console.info("Fail to decompress and treat it as just urlencoded text");
+                return decodeURIComponent(value);
+            }
         }
         return null;
     },
-    setText: (value: string) => {
+    setText: async (value: string) => {
         // encode to avoid special characters
-        location.hash = encodeURIComponent(value);
+        const encodedValue = encodeURIComponent(value);
+        // compress to avoid URL is too long 414 Request-URI Too Large
+        location.hash = await compress(encodedValue);
     },
     get: (key: SupportedKey) => {
         const url = new URL(window.location.href);

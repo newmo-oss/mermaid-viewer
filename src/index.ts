@@ -19,17 +19,18 @@ const defaultSequence = `sequenceDiagram
     destroy Bob
     Bob->>Alice: I agree
 `;
-const text = urlStorage.getText();
-if (text) {
-    mermaid.setAttribute("text", text);
-} else {
-    mermaid.setAttribute("text", defaultSequence);
-    mermaid.setAttribute("dialog-open", "true");
-}
-const sequence = urlStorage.get("sequence-number");
-if (sequence) {
-    mermaid.setAttribute("sequence-number", sequence);
-}
+urlStorage.getText().then((text) => {
+    if (text) {
+        mermaid.setAttribute("text", text);
+    } else {
+        mermaid.setAttribute("text", defaultSequence);
+        mermaid.setAttribute("dialog-open", "true");
+    }
+    const sequence = urlStorage.get("sequence-number");
+    if (sequence) {
+        mermaid.setAttribute("sequence-number", sequence);
+    }
+});
 mermaid.on("textChange", (event) => {
     urlStorage.setText(event.detail.text);
 });

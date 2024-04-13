@@ -18,12 +18,24 @@ Interactive Mermaid Viewer.
 4. Render
 5. Fun!!!
 
-## Query Parameters
+## URL Parameters/Hash
 
 it-mermaid-viewer support query parameters.
 
-- `?text=<url-encoded-mermaid-text>`: Embed Mermaid text
 - `?sequence-number=<number>`: Start sequence number
+- `#<url-encoded-mermaid-text>`: Embed Mermaid text
+  - e.g. `?text=encodeURIComponent('sequenceDiagram\nA->>B: Hello')`
+  - Note: it-mermaid-viewer compress Mermaid text by [DEFLATE](https://www.rfc-editor.org/rfc/rfc1951).
+  - Allow you to use url-encoded text for passing data, but it will be compressed and rewrite the hash.
+
+### Example
+
+Pass your Mermaid text by URL parameters.
+
+```
+// encodeURIComponent('sequenceDiagram\nA->>B: Hello')
+?sequence-number=10#sequenceDiagram%0AA-%3E%3EB%3A%20Hello
+```
 
 ## Changelog
 
