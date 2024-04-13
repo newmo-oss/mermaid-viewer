@@ -45,16 +45,16 @@ jobs:
                     const endLine = content.slice(0, mermaidCode.index + mermaidCode[0].length).split("\n").length;
                     console.log(`file: ${fileContent.name}, startColumn: ${mermaidCode.index}, endColumn: ${mermaidCode.index + mermaidCode[0].length}, startLine: ${startLine}, endLine: ${endLine}`);
                     // review comment to Pull requrest
-                    github.rest.pulls.createReviewComment({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        pull_number: context.issue.number,
-                        body: `[Mermaid Viewer Link](https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)})`,
-                        commit_id: context.payload.pull_request.head.sha,
-                        path: fileContent.name,
-                        start_line: startLine,
-                        line: endLine
-                    });
+#                    github.rest.pulls.createReviewComment({
+#                        owner: context.repo.owner,
+#                        repo: context.repo.repo,
+#                        pull_number: context.issue.number,
+#                        body: `[Mermaid Viewer Link](https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)})`,
+#                        commit_id: context.payload.pull_request.head.sha,
+#                        path: fileContent.name,
+#                        start_line: startLine,
+#                        line: endLine
+#                    });
                     core.summary.addCodeBlock(`${mermaidText}`)', 'mermaid');
                     core.summary.addLink('Mermaid Viewer', `https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`);
                     core.summary.addSeparator();
