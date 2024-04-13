@@ -43,7 +43,10 @@ If you commit mermaid text to your repository, you can add a link to the it-merm
 
 ```yaml
 name: it-mermaid-viewer-notice
-on: [pull_request]
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
 permissions:
   contents: read
 jobs:
