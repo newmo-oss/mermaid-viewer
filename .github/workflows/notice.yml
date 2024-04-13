@@ -43,8 +43,9 @@ jobs:
                 const mermaidCodes = content.matchAll(/```mermaid([\s\S]*?)```/g);
                 for (const mermaidCode of mermaidCodes) {
                     const mermaidText = mermaidCode[1];
-                    const lineNumber = content.slice(0, mermaidCode.index).split("\n").length;
-                    console.log(`file: ${fileContent.name}, startColumn: ${mermaidCode.index}, endCoulmn: ${mermaidCode.index + mermaidCode[0].length}, line: lineNumber`);
+                    const startLine = content.slice(0, mermaidCode.index).split("\n").length;
+                    const endLine = content.slice(0, mermaidCode.index + mermaidCode[0].length).split("\n").length;
+                    console.log(`file: ${fileContent.name}, startColumn: ${mermaidCode.index}, endCoulmn: ${mermaidCode.index + mermaidCode[0].length}, startLine: ${startLine}, endLine: ${endLine}`);
                     // review comment to Pull requrest
                     github.rest.pulls.createReviewComment({
                         owner: context.repo.owner,
@@ -53,7 +54,8 @@ jobs:
                         body: `[Mermaid Viewer Link](https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)})`,
                         commit_id: context.payload.pull_request.head.sha,
                         path: fileContent.name,
-                        line: lineNumber
+                        start_line: startLine,
+                        line: endLine
                     });
                     core.notice(`https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`, { title: "Mermaid Viewer", file: fileContent.name, startColumn: mermaidCode.index, endColumn: mermaidCode.index + mermaidCode[0].length });
                 }
