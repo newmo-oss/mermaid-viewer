@@ -1,6 +1,10 @@
-# it-mermaid-viewer
+# @newmo-oss/mermaid-viewer
 
-Interactive Mermaid Viewer.
+User Friendly Mermaid Viewer
+
+## WebSite
+
+- <https://newmo-oss.github.io/mermaid-viewer/>
 
 ## Features
 
@@ -12,20 +16,19 @@ Interactive Mermaid Viewer.
 
 ## Usage
 
-1. Open [it-mermaid-viewer](https://azu.github.io/it-mermaid-viewer/)
-2. Click "🛠️"(Edit) button
-3. Write Mermaid text
-4. Render
-5. Fun!!!
+1. Visit <https://newmo-oss.github.io/mermaid-viewer/>
+2. Write Mermaid text
+3. Render
+4. Share it!
 
 ## URL Parameters/Hash
 
-it-mermaid-viewer support query parameters.
+@newmo-oss/mermaid-viewer support query parameters.
 
 - `?sequence-number=<number>`: Start sequence number
 - `#<url-encoded-mermaid-text>`: Embed Mermaid text
   - e.g. `?text=encodeURIComponent('sequenceDiagram\nA->>B: Hello')`
-  - Note: it-mermaid-viewer compress Mermaid text by [DEFLATE](https://www.rfc-editor.org/rfc/rfc1951).
+  - Note: @newmo-oss/mermaid-viewer compress Mermaid text by [DEFLATE](https://www.rfc-editor.org/rfc/rfc1951).
   - Allow you to use url-encoded text for passing data, but it will be compressed and rewrite the hash.
 
 ### Example
@@ -34,15 +37,15 @@ Pass your Mermaid text by URL parameters.
 
 ```
 // encodeURIComponent('sequenceDiagram\nA->>B: Hello')
-?sequence-number=10#sequenceDiagram%0AA-%3E%3EB%3A%20Hello
+https://newmo-oss.github.io/mermaid-viewer/?sequence-number=10#sequenceDiagram%0AA-%3E%3EB%3A%20Hello
 ```
 
 ## GitHub Actions Integration
 
-If you commit mermaid text to your repository, you can add a link to the it-mermaid-viewer to the PR.
+If you commit mermaid text to your repository, you can add a link to the @newmo-oss/mermaid-viewer to the PR.
 
 ```yaml
-name: it-mermaid-viewer-notice
+name: mermaid-viewer-notice
 on:
   pull_request:
     paths:
@@ -50,7 +53,7 @@ on:
 permissions:
   contents: read
 jobs:
-  it-mermaid-viewer-notice:
+  mermaid-viewer-notice:
     name: Add Mermaid Viewer to PR
     runs-on: ubuntu-latest
     steps:
@@ -91,10 +94,10 @@ jobs:
                     const endLine = content.slice(0, mermaidCode.index + mermaidCode[0].length).split("\n").length;
                     console.log(`file: ${fileContent.name}, startColumn: ${mermaidCode.index}, endColumn: ${mermaidCode.index + mermaidCode[0].length}, startLine: ${startLine}, endLine: ${endLine}`);
                     core.summary.addCodeBlock(`${mermaidText}`, 'mermaid');
-                    core.summary.addLink('Mermaid Viewer', `https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`);
+                    core.summary.addLink('Mermaid Viewer', `https://newmo-oss.github.io/mermaid-viewer/#${encodeURIComponent(mermaidText)}`);
                     core.summary.addSeparator();
                     core.summary.write({overwrite: true})
-                    core.notice(`https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`, { title: "Mermaid Viewer", file: fileContent.name, startLine, endLine });
+                    core.notice(`https://newmo-oss.github.io/mermaid-viewer/#${encodeURIComponent(mermaidText)}`, { title: "Mermaid Viewer", file: fileContent.name, startLine, endLine });
                   }
               }
         env:
@@ -104,7 +107,7 @@ jobs:
 
 ## Changelog
 
-See [Releases page](https://github.com/azu/it-mermaid-viewer/releases).
+See [Releases page](https://github.com/newmo-oss/mermaid-viewer/releases).
 
 ## Running tests
 
@@ -116,7 +119,7 @@ Install devDependencies and Run `npm test`:
 
 Pull requests and stars are always welcome.
 
-For bugs and feature requests, [please create an issue](https://github.com/azu/it-mermaid-viewer/issues).
+For bugs and feature requests, [please create an issue](https://github.com/newmo-oss/mermaid-viewer/issues).
 
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
@@ -126,4 +129,4 @@ For bugs and feature requests, [please create an issue](https://github.com/azu/i
 
 ## License
 
-MIT © azu
+MIT © newmo, Inc.

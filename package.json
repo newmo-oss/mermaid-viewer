@@ -1,22 +1,22 @@
 {
-  "name": "it-mermaid-viewer",
+  "name": "@newmo-oss/mermaid-viewer",
   "version": "1.0.0",
-  "description": "Interactive Mermaid Viewer",
-  "homepage": "https://github.com/azu/it-mermaid-viewer",
+  "description": "User Friendly Mermaid Viewer\n\n",
+  "homepage": "https://github.com/newmo-oss/mermaid-viewer",
   "bugs": {
-    "url": "https://github.com/azu/it-mermaid-viewer/issues"
+    "url": "https://github.com/newmo-oss/mermaid-viewer/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/azu/it-mermaid-viewer.git"
+    "url": "https://github.com/newmo-oss/mermaid-viewer.git"
   },
   "license": "MIT",
-  "author": "azu",
+  "author": "newmo, Inc.",
   "source": "src/index.html",
   "browserslist": "> 0.5%, last 2 versions",
   "scripts": {
     "dev": "parcel",
-    "build": "parcel build --public-url /it-mermaid-viewer/",
+    "build": "parcel build --public-url /mermaid-viewer/",
     "test": "npm run type-check && npm run build",
     "type-check": "tsc --noEmit",
     "preview": "npm run build && npx http-server dist",

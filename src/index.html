@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>it-mermaid-viewer</title>
+    <title>@newmo-oss/mermaid-viewer</title>
+    <meta
+        name="description"
+        content="Mermaid Viewer is a web component that renders Mermaid Diagrams.">
     <!--    emoji favicon-->
     <link rel="icon"
           href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext x='0' y='20' font-size='20' fill='%23f1f1f1'%3E🧜‍️%3C/text%3E%3C/svg%3E"
@@ -83,6 +86,12 @@
                     cursor: pointer;
                 }
 
+                .renderButton {
+                    font-size: 1.5rem;
+                    width: 100%;
+                    padding: 1rem;
+                }
+
                 .prevButton:hover, .nextButton:hover, .renderButton:hover {
                     background-color: #0056b3;
                 }
@@ -92,12 +101,6 @@
                 }
 
                 #inputDialog[open] {
-                    display: block;
-                }
-
-                #inputDialogInput {
-                    width: 80%;
-                    height: 80%;
                     display: block;
                 }
 
@@ -155,7 +158,6 @@
                 }
 
                 .openDialog {
-                    /*         config style button*/
                     padding: 0.5rem 1rem;
                     font-size: 1rem;
                     border: none;
@@ -163,16 +165,49 @@
                     border-radius: 0.5rem;
                     cursor: pointer;
                 }
+
+                .footer {
+                    margin-top: 1rem;
+                    font-size: 1rem;
+                    color: #666;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    display: block;
+                    padding: 0.5rem 1rem;
+                }
+
+                .footerText {
+                    text-align: right;
+                    padding-inline: 1rem;
+                }
             </style>
             <dialog id="inputDialog">
-                <label for="inputDialogInput">Marmaid Diagram</label><textarea id="inputDialogInput"></textarea>
-                <button id="inputDialogClose" class="renderButton">Render</button>
-                <p>
-                    Note: Enable `autonumber` to enable sequence diagram
-                </p>
-                <ul>
-                    <li>📝 <a href="https://mermaid.js.org/intro/syntax-reference.html">Mermaid Document</a></li>
-                </ul>
+                <div style="width: 100%; height: 100%;">
+                    <label for="inputDialogInput">Marmaid Diagram</label><textarea id="inputDialogInput"
+                                                                                   style="display: block;width: 100%; height: 50em;"></textarea>
+                    <div style="display: flex;flex-direction: column; align-items: center; align-content: center; padding-block: 0.5rem;">
+                        <button id="inputDialogClose" class="renderButton" style="display: block;">Render</button>
+                    </div>
+                    <h2>Usage</h2>
+                    <ol>
+                        <li>📝 Write Mermaid Diagram in the textarea</li>
+                        <li>🔍 Click "Render" Button</li>
+                        <li>🔗 Copy URL and Share it!</li>
+                    </ol>
+                    <h2>Reference</h2>
+                    <p>
+                        📝 <a href="https://mermaid.js.org/intro/syntax-reference.html">Mermaid Document</a></li>
+                    </p>
+                    <footer class="footer">
+                        <p class="footerText">
+                            Source Code is available on <a href="">GitHub</a>
+                        </p>
+                        <p class="footerText">
+                            Created by <a href="https://newmo.me/">newmo, Inc.</a>
+                        </p>
+                    </footer>
+                </div>
             </dialog>
             <div id="sequenceController" class="sequenceController">
                 <button id="prevSequence" class="prevButton">Prev</button>

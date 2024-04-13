@@ -3,5 +3,5 @@
   "transformers": {
     "*.{ts,tsx}": ["@parcel/transformer-typescript-tsc"]
   },
-  "publicUrl": "/it-mermaid-viewer"
+  "publicUrl": "/mermaid-viewer"
 }

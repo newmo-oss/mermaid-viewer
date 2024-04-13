@@ -1,4 +1,4 @@
-name: it-mermaid-viewer-notice
+name: mermaid-viewer-notice
 on:
   pull_request:
     paths:
@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 jobs:
-  it-mermaid-viewer-notice:
+  mermaid-viewer-notice:
     name: Add Mermaid Viewer to PR
     runs-on: ubuntu-latest
     steps:
@@ -47,10 +47,10 @@ jobs:
                     const endLine = content.slice(0, mermaidCode.index + mermaidCode[0].length).split("\n").length;
                     console.log(`file: ${fileContent.name}, startColumn: ${mermaidCode.index}, endColumn: ${mermaidCode.index + mermaidCode[0].length}, startLine: ${startLine}, endLine: ${endLine}`);
                     core.summary.addCodeBlock(`${mermaidText}`, 'mermaid');
-                    core.summary.addLink('Mermaid Viewer', `https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`);
+                    core.summary.addLink('Mermaid Viewer', `https://newmo-oss.github.io/mermaid-viewer/#${encodeURIComponent(mermaidText)}`);
                     core.summary.addSeparator();
                     core.summary.write({overwrite: true})
-                    core.notice(`https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)}`, { title: "Mermaid Viewer", file: fileContent.name, startLine, endLine });
+                    core.notice(`https://newmo-oss.github.io/mermaid-viewer/#${encodeURIComponent(mermaidText)}`, { title: "Mermaid Viewer", file: fileContent.name, startLine, endLine });
                   }
               }
         env:
