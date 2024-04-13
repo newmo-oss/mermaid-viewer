@@ -46,7 +46,7 @@ const compress = async (target: string): Promise<string> => {
     const blob = new Blob([target]);
     const stream = blob.stream();
     const compressedStream = stream.pipeThrough(
-        new CompressionStream("deflate-raw")
+        new CompressionStream("deflate")
     );
     const buf = await new Response(compressedStream).arrayBuffer();
     const binaryString = arrayBufferToBinaryString(buf);
@@ -66,7 +66,7 @@ const decompress = async (target: string): Promise<string> => {
     const bytes = binaryStringToBytes(decodedByBase64);
     const stream = new Blob([bytes]).stream();
     const decompressedStream = stream.pipeThrough(
-        new DecompressionStream("deflate-raw")
+        new DecompressionStream("deflate")
     );
     return await new Response(decompressedStream).text();
 };
