@@ -45,12 +45,11 @@ jobs:
                     const mermaidText = mermaidCode[1];
                     console.log(`file: ${fileContent.name}, start: ${mermaidCode.index}, end: ${mermaidCode.index + mermaidCode[0].length}`);
                     // review comment to Pull requrest
-                    // github.rest.pulls.createReviewComment
                     github.rest.pulls.createReviewComment({
                         owner: context.repo.owner,
                         repo: context.repo.repo,
                         pull_number: context.issue.number,
-                        body: `[Link](https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)})`,
+                        body: `[Mermaid Viewer Link](https://azu.github.io/it-mermaid-viewer/#${encodeURIComponent(mermaidText)})`,
                         commit_id: context.payload.pull_request.head.sha,
                         path: fileContent.name,
                         position: mermaidCode.index
