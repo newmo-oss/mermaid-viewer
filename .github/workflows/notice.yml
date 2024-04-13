@@ -17,6 +17,7 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
+          separator: "\n"
           files: |
             *.md # Only check markdown files
       - name: Add notice to PR
