@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1000
       - name: setup Node.js
         uses: actions/setup-node@v4
         with:
