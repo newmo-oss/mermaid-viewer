@@ -90,7 +90,7 @@ export const urlStorage = {
     },
     setText: async (value: string) => {
         // compress to avoid URL is too long 414 Request-URI Too Large
-        location.hash = await compress(value);
+        window.history.replaceState({}, "", "#" + (await compress(value)));
     },
     get: (key: SupportedKey) => {
         const url = new URL(window.location.href);
