@@ -45,7 +45,7 @@ jobs:
                     const mermaidText = mermaidCode[1];
                     const startLine = content.slice(0, mermaidCode.index).split("\n").length;
                     const endLine = content.slice(0, mermaidCode.index + mermaidCode[0].length).split("\n").length;
-                    console.log(`file: ${fileContent.name}, startColumn: ${mermaidCode.index}, endCoulmn: ${mermaidCode.index + mermaidCode[0].length}, startLine: ${startLine}, endLine: ${endLine}`);
+                    console.log(`file: ${fileContent.name}, startColumn: ${mermaidCode.index}, endColumn: ${mermaidCode.index + mermaidCode[0].length}, startLine: ${startLine}, endLine: ${endLine}`);
                     // review comment to Pull requrest
                     github.rest.pulls.createReviewComment({
                         owner: context.repo.owner,
