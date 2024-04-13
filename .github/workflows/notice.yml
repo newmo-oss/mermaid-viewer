@@ -30,7 +30,6 @@ jobs:
           script: |
             // arguments is an array of file paths
             const fs = require("node:fs/promises");
-            const fs = require("node:fs/promises");
             const positionals = process.env.CHANGED_FILES.split(",").filter(Boolean);
             const fileContents = await Promise.all(positionals.map(async (file) => {
                 return {
