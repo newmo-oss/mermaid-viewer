@@ -80,7 +80,7 @@ export const urlStorage = {
         const value = url.hash.slice(1);
         if (value) {
             try {
-                return await decompress(decodeURIComponent(value));
+                return await decompress(value);
             } catch {
                 console.info("Fail to decompress and treat it as just urlencoded text");
                 return decodeURIComponent(value);
@@ -89,10 +89,8 @@ export const urlStorage = {
         return null;
     },
     setText: async (value: string) => {
-        // encode to avoid special characters
-        const encodedValue = encodeURIComponent(value);
         // compress to avoid URL is too long 414 Request-URI Too Large
-        location.hash = await compress(encodedValue);
+        location.hash = await compress(value);
     },
     get: (key: SupportedKey) => {
         const url = new URL(window.location.href);

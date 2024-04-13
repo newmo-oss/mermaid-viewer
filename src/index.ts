@@ -31,8 +31,8 @@ urlStorage.getText().then((text) => {
         mermaid.setAttribute("sequence-number", sequence);
     }
 });
-mermaid.on("textChange", (event) => {
-    urlStorage.setText(event.detail.text);
+mermaid.on("textChange", async (event) => {
+    await urlStorage.setText(event.detail.text);
 });
 mermaid.on("sequenceChange", (event) => {
     urlStorage.set("sequence-number", String(event.detail.sequenceNumber));
