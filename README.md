@@ -11,7 +11,7 @@ User Friendly [Mermaid](https://mermaid.js.org/) Diagram Viewer.
 Mermaid is a great tool for creating diagrams.
 However, it is hard to read large diagrams because the default viewer does not support interactive features like zooming in/out.
 
-[@newmo-oss/mermaid-viewer](https://newmo-oss.github.io/mermaid-viewer/) is a user-friendly Mermaid diagram viewer that supports interactive features like zooming in/out and step-by-step sequence viewing. 
+[@newmo-oss/mermaid-viewer](https://newmo-oss.github.io/mermaid-viewer/) is a user-friendly Mermaid diagram viewer that supports interactive features like zooming in/out and step-by-step sequence viewing.
 
 https://github.com/newmo-oss/mermaid-viewer/assets/19714/9b78b1fc-0b74-4233-948d-ff46f484bbe8
 
@@ -74,7 +74,7 @@ jobs:
           node-version: '20'
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v44
+        uses: tj-actions/changed-files@20576b4b9ed46d41e2d45a2256e5e2316dde6834
         with:
           separator: ","
           files: |
