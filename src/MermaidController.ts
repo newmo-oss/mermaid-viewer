@@ -1,5 +1,6 @@
 import mermaid from "mermaid";
 import panzoom, { PanZoom } from "panzoom";
+import jsPDF from "jspdf";
 
 export type SupportedKey = "text" | "sequence-number";
 
@@ -45,9 +46,7 @@ const compress = async (target: string): Promise<string> => {
 
     const blob = new Blob([target]);
     const stream = blob.stream();
-    const compressedStream = stream.pipeThrough(
-        new CompressionStream("deflate")
-    );
+    const compressedStream = stream.pipeThrough(new CompressionStream("deflate"));
     const buf = await new Response(compressedStream).arrayBuffer();
     const binaryString = arrayBufferToBinaryString(buf);
     const encodedByBase64 = btoa(binaryString);
@@ -65,12 +64,9 @@ const decompress = async (target: string): Promise<string> => {
     const decodedByBase64 = atob(target);
     const bytes = binaryStringToBytes(decodedByBase64);
     const stream = new Blob([bytes]).stream();
-    const decompressedStream = stream.pipeThrough(
-        new DecompressionStream("deflate")
-    );
+    const decompressedStream = stream.pipeThrough(new DecompressionStream("deflate"));
     return await new Response(decompressedStream).text();
 };
-
 
 export const urlStorage = {
     // use hash for avoiding URL is too long 414 Request-URI Too Large
@@ -198,6 +194,15 @@ export class MermaidController extends HTMLElement {
         );
         this.#inputDialogOpen.addEventListener("click", () => {
             this.openInputDialog();
+        });
+        this.shadowRoot.querySelector("#exportPNG")?.addEventListener("click", () => {
+            this.exportAs("png");
+        });
+        this.shadowRoot.querySelector("#exportJPG")?.addEventListener("click", () => {
+            this.exportAs("jpeg");
+        });
+        this.shadowRoot.querySelector("#exportPDF")?.addEventListener("click", () => {
+            this.exportAsPdf();
         });
         const text = this.getAttribute("text");
         const startSequenceNumber = this.getAttribute("sequence-number") ?? "0";
@@ -351,9 +356,9 @@ export class MermaidController extends HTMLElement {
         // graphDiv is not rendered yet loop until it is rendered
         let count = 0;
         const limit = 10;
-        console.log(document.querySelector(`#${this.getAttribute("target")} .sequenceNumber`))
+        console.log(document.querySelector(`#${this.getAttribute("target")} .sequenceNumber`));
         while (!document.querySelector(`#${this.getAttribute("target")} .sequenceNumber`)) {
-            console.log("qw")
+            console.log("qw");
             await new Promise<void>((resolve) => {
                 setTimeout(() => {
                     resolve();
@@ -424,8 +429,8 @@ export class MermaidController extends HTMLElement {
             // viewPort 1000 → padding: 500
             // y = -1/5x + 700
             // limit: 100 <= padding <= 600
-            const calcPaddingBlock = -1 / 5 * viewBoxSize.height + 700;
-            const calcPaddingInline = -1 / 5 * viewBoxSize.width + 700;
+            const calcPaddingBlock = (-1 / 5) * viewBoxSize.height + 700;
+            const calcPaddingInline = (-1 / 5) * viewBoxSize.width + 700;
             const rectanglePaddingBlock = Math.max(100, Math.min(600, calcPaddingBlock));
             const rectanglePaddingInline = Math.max(100, Math.min(600, calcPaddingInline));
             console.debug("Padding Calculation Results", {
@@ -434,7 +439,7 @@ export class MermaidController extends HTMLElement {
                 calcPaddingInline,
                 rectanglePaddingBlock,
                 rectanglePaddingInline
-            })
+            });
             // target.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" })
             // https://github.com/anvaka/panzoom/issues/219
             pan.smoothShowRectangle(
@@ -449,9 +454,9 @@ export class MermaidController extends HTMLElement {
                 (from, to) => {
                     const distance = Math.sqrt(
                         Math.pow(from.top - to.top, 2) +
-                        Math.pow(from.right - to.right, 2) +
-                        Math.pow(from.bottom - to.bottom, 2) +
-                        Math.pow(from.left - to.left, 2)
+                            Math.pow(from.right - to.right, 2) +
+                            Math.pow(from.bottom - to.bottom, 2) +
+                            Math.pow(from.left - to.left, 2)
                     );
                     const exp_diff = Math.exp(distance / 1000);
                     const sigmoid = (exp_diff * 1000) / (exp_diff + 1);
@@ -475,7 +480,7 @@ export class MermaidController extends HTMLElement {
                 const moveToNumber = Math.max(0, currentNumber + 1);
                 const currentSequenceElement = getSequenceElement(moveToNumber);
                 if (!currentSequenceElement) {
-                    this.#pan?.smoothShowRectangle
+                    this.#pan?.smoothShowRectangle;
                     return;
                 }
                 panElement(currentSequenceElement);
@@ -487,7 +492,7 @@ export class MermaidController extends HTMLElement {
                 if (moveToNumber === 0) {
                     // reset zoom
                     this.#pan?.smoothZoomAbs(0, 0, 1);
-                    this.updateSequenceNumber(0)
+                    this.updateSequenceNumber(0);
                     return;
                 }
                 const currentSequenceElement = getSequenceElement(moveToNumber);
@@ -498,5 +503,105 @@ export class MermaidController extends HTMLElement {
                 this.updateSequenceNumber(moveToNumber);
             }
         };
+    }
+
+    async exportAs(format: "png" | "jpeg") {
+        const graphDiv = document.getElementById("graphDiv");
+        const svgElement = graphDiv?.querySelector("svg");
+        if (!svgElement) {
+            alert("Diagram not ready. Please wait a moment and try again.");
+            console.error("No SVG found to export.");
+            return;
+        }
+
+        try {
+            const svgXml = new XMLSerializer().serializeToString(svgElement);
+            // Use encodeURIComponent to handle special characters in the SVG data.
+            const svgDataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgXml);
+
+            const image = new Image();
+            image.onload = () => {
+                const canvas = document.createElement("canvas");
+                // Use the SVG's viewbox for sizing to ensure the entire diagram is captured.
+                const viewBox = svgElement.viewBox.baseVal;
+                canvas.width = viewBox.width;
+                canvas.height = viewBox.height;
+
+                const context = canvas.getContext("2d");
+                if (!context) {
+                    alert("Could not create image context.");
+                    return;
+                }
+
+                // Fill background with white before drawing, for JPGs and transparency handling.
+                context.fillStyle = "white";
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(image, 0, 0);
+
+                const dataUrl = canvas.toDataURL(`image/${format}`);
+                const link = document.createElement("a");
+                link.href = dataUrl;
+                link.download = `mermaid-diagram.${format}`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+            image.onerror = (err) => {
+                console.error("Failed to load SVG into an image:", err);
+                alert("Sorry, there was an error preparing the image for download.");
+            };
+            image.src = svgDataUrl;
+        } catch (e) {
+            console.error("Export failed:", e);
+            alert("An unexpected error occurred during the export.");
+        }
+    }
+
+    async exportAsPdf() {
+        const graphDiv = document.getElementById("graphDiv");
+        const svgElement = graphDiv?.querySelector("svg");
+        if (!svgElement) {
+            alert("Diagram not ready. Please wait a moment and try again.");
+            console.error("No SVG found to export.");
+            return;
+        }
+
+        try {
+            const svgXml = new XMLSerializer().serializeToString(svgElement);
+            const svgDataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgXml);
+
+            const image = new Image();
+            image.onload = () => {
+                const canvas = document.createElement("canvas");
+                const viewBox = svgElement.viewBox.baseVal;
+                canvas.width = viewBox.width;
+                canvas.height = viewBox.height;
+
+                const context = canvas.getContext("2d");
+                if (!context) {
+                    alert("Could not create image context.");
+                    return;
+                }
+
+                context.fillStyle = "white";
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(image, 0, 0);
+
+                const pngDataUrl = canvas.toDataURL("image/png");
+
+                const orientation = canvas.width > canvas.height ? "l" : "p";
+                const pdf = new jsPDF(orientation, "px", [canvas.width, canvas.height]);
+                pdf.addImage(pngDataUrl, "PNG", 0, 0, canvas.width, canvas.height);
+                pdf.save("mermaid-diagram.pdf");
+            };
+            image.onerror = (err) => {
+                console.error("Failed to load SVG for PDF export:", err);
+                alert("Sorry, there was an error preparing the image for the PDF.");
+            };
+            image.src = svgDataUrl;
+        } catch (e) {
+            console.error("PDF Export failed:", e);
+            alert("An unexpected error occurred during the PDF export.");
+        }
     }
 }
